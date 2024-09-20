@@ -22,8 +22,9 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
-                "glob": "**/*",
-                "input": "public"
+                "glob": "silent-check-sso.html",
+                "input": "src/assets",
+                "output": "/"
               }
             ],
             "styles": [
