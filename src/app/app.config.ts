@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom , APP_INITIALIZER } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom , APP_INITIALIZER, provideZoneChangeDetection } from '@angular/core';
 
 import { provideRouter } from '@angular/router';
 
@@ -16,25 +16,18 @@ import { authInterceptor } from './interceptor/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
 
-  providers: [
+  // providers: [
 
-    provideRouter(routes),
-    KeycloakService,
-    // importProvidersFrom(KeycloakAngularModule),
-    // {
-    //   provide: KeycloakService,
-    //   useClass: KeycloakService
-    // },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initalizeKeycloak,
-      multi: true,
-      deps: [KeycloakService]
+  //   provideRouter(routes),
+  //   KeycloakService,
+  //   {
+  //     provide: APP_INITIALIZER,
+  //     useFactory: initalizeKeycloak,
+  //     multi: true,
+  //     deps: [KeycloakService]
 
-    }
+  //   }
 
-    // provideHttpClient(withInterceptors([authInterceptor]))
-
-  ]
-
+  // ]
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
 };
