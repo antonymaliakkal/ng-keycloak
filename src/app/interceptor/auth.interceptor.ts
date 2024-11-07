@@ -1,20 +1,21 @@
-import { HttpHandlerFn,HttpRequest } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHandlerFn, HttpInterceptorFn } from '@angular/common/http';
+import { from, mergeMap, Observable, switchMap } from 'rxjs';
 import { KeycloakService } from 'keycloak-angular';
 
-export function authInterceptor(req: HttpRequest<unknown> , next: HttpHandlerFn) {
-
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const keycloak = inject(KeycloakService);
 
-if(keycloak.isLoggedIn()) {
-  const authToken = keycloak.getToken();
-  
-  req = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${authToken}`
-    }
-  });
-
-}
-   return next(req);
-}
+  return from(keycloak.getToken()).pipe(
+    switchMap(token => {
+      if (token) {
+        console.log('Token' , token);
+        const authReq = req.clone({
+          setHeaders: { Authorization: `Bearer ${token}` }
+        });
+        return next(authReq);
+      }
+      return next(req);
+    })
+  );
+};

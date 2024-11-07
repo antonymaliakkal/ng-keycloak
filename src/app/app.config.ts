@@ -20,20 +20,16 @@ export const appConfig: ApplicationConfig = {
 
     provideRouter(routes),
     KeycloakService,
-    // importProvidersFrom(KeycloakAngularModule),
-    // {
-    //   provide: KeycloakService,
-    //   useClass: KeycloakService
-    // },
+
     {
       provide: APP_INITIALIZER,
       useFactory: initalizeKeycloak,
       multi: true,
       deps: [KeycloakService]
 
-    }
+    },
 
-    // provideHttpClient(withInterceptors([authInterceptor]))
+    provideHttpClient(withInterceptors([authInterceptor]))
 
   ]
 
